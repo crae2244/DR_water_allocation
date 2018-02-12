@@ -8,7 +8,7 @@ class DrWaterAllocation(TethysAppBase):
 
     name = 'DR Water Allocation'
     index = 'dr_water_allocation:home'
-    icon = 'dr_water_allocation/images/icon.gif'
+    icon = 'dr_water_allocation/images/flag-waving-250.png'
     package = 'dr_water_allocation'
     root_url = 'dr-water-allocation'
     color = '#5575e8'
