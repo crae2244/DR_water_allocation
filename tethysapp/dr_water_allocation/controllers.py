@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from tethys_sdk.gizmos import Button
-from tethys_sdk.gizmos import MapView, MVDraw, MVView, MVLayer, MVLegendClass
+from tethys_sdk.gizmos import MapView, MVView, MVLayer, MVLegendClass
 
 @login_required()
 def home(request):
@@ -10,29 +10,66 @@ def home(request):
     """
 
     next_button = Button(
-        display_text='Next',
+        display_text='Compute',
         name='next-button',
         attributes={
             'data-toggle':'tooltip',
             'data-placement':'top',
-            'title':'Next'
+            'title':'next'
+        }
+    )
+
+    diversion_points = {
+        'type': 'FeatureCollection',
+        'crs': {
+            'type': 'name',
+            'properties': {
+                'name': 'EPSG:4326'
+            }
+        },
+        'features': [
+            {
+                'type': 'Feature',
+                'geometry': {
+                    'type': 'Point',
+                    'coordinates': [-70.8, 18.56]
+                }
+            },
+        ]
+    }
+
+    geojson_diversion_point_layer = MVLayer(
+        source='GeoJSON',
+        options=diversion_points,
+        legend_title="Diversion Points",
+        layer_options={
+            'style': {
+                'image': {
+                    'circle': {
+                        'radius': 6,
+                        'fill': {'color': '#d84e1f'},
+                        'stroke': {'color': '#ffffff', 'width': 1},
+                    }
+                }
+            }
         }
     )
 
     view_options = MVView(
         projection='EPSG:4326',
-        center=[-100, 40],
-        zoom=3.5,
+        center=[-70.8, 18.56],
+        zoom=10,
         maxZoom=18,
         minZoom=2
     )
 
     map_view_options = MapView(
-        height='600px',
+        height='100%',
         width='100%',
-        controls=['ZoomSlider', 'Rotate', 'FullScreen',
+        controls=[ 'Rotate', 'FullScreen',
                   {'MousePosition': {'projection': 'EPSG:4326'}},
                   {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
+        layers=[geojson_diversion_point_layer],
         view=view_options,
         basemap='OpenStreetMap',
         legend=True
