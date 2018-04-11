@@ -30,19 +30,19 @@ $(function() {
             var coordinates = selected_feature.getGeometry().getCoordinates();
             var comID=selected_feature.get('feature_id')
             var popup_content = '<div class="diversion-popup">' +
-                                    '<p><b>Point 1</b></p>' +
+                                    '<p><b>'+ selected_feature.get('point_name') + '</b></p>' +
                                     '<table class="table  table-condensed">' +
                                         '<tr>' +
                                             '<th>Demand</th>' +
-                                            '<td>' + selected_feature.get('demand') + '</td>' +
+                                            '<td><input type="text" name="demand"></td>' +
                                         '</tr>' +
                                         '<tr>' +
                                             '<th>Piority</th>' +
-                                            '<td>' + selected_feature.get('priority') + '</td>' +
+                                            '<td><input type="text" name="priority"></td>' +
                                         '</tr>' +
                                         '<tr>' +
                                             '<th>Efficiency</th>' +
-                                            '<td>' + selected_feature.get('efficiency') + '</td>' +
+                                            '<td><input type="text" name="efficeincy"></td>' +
                                         '</tr>' +
                                     '</table>' +
                                 '</div>';

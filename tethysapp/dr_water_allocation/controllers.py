@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from tethys_sdk.gizmos import Button
 from tethys_sdk.gizmos import MapView, MVView, MVLayer, MVLegendClass
+from model import read_points_from_csv
 
 @login_required()
 def home(request):
@@ -19,22 +20,24 @@ def home(request):
         }
     )
 
+    diversion_points_list = read_points_from_csv()
     features = []
 
-    diversion_point_feature = {
-        'type': 'Feature',
-        'geometry': {
-            'type': 'Point',
-            'coordinates': [-70.8, 18.56],
-        },
-        'properties':{
-            'point_name':'Point1',
-            'demand':[2],
-            'efficiency':[2],
-            'priority':[2]
+    for item in diversion_points_list:
+        diversion_point_feature = {
+            'type': 'Feature',
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [item[2], item[3]],
+            },
+            'properties':{
+                'point_name':[item[0]],
+                'demand':[item[1]],
+                'efficiency':[.6],
+                'priority':'High'
+            }
         }
-    }
-    features.append(diversion_point_feature)
+        features.append(diversion_point_feature)
 
     diversion_points_collection = {
         'type': 'FeatureCollection',
@@ -64,7 +67,7 @@ def home(request):
             }
         }
     )
-
+    print geojson_diversion_point_layer
     view_options = MVView(
         projection='EPSG:4326',
         center=[-70.8, 18.56],
