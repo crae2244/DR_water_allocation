@@ -11,8 +11,8 @@ class DrWaterAllocation(TethysAppBase):
     icon = 'dr_water_allocation/images/flag-waving-250.png'
     package = 'dr_water_allocation'
     root_url = 'dr-water-allocation'
-    color = '#5575e8'
-    description = 'Shows effects of different water distribution scenarios'
+    color = '#98a50d'
+    description = 'Shows different water distribution scenarios'
     tags = 'DR'
     enable_feedback = False
     feedback_emails = []

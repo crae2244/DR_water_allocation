@@ -19,7 +19,24 @@ def home(request):
         }
     )
 
-    diversion_points = {
+    features = []
+
+    diversion_point_feature = {
+        'type': 'Feature',
+        'geometry': {
+            'type': 'Point',
+            'coordinates': [-70.8, 18.56],
+        },
+        'properties':{
+            'point_name':'Point1',
+            'demand':[2],
+            'efficiency':[2],
+            'priority':[2]
+        }
+    }
+    features.append(diversion_point_feature)
+
+    diversion_points_collection = {
         'type': 'FeatureCollection',
         'crs': {
             'type': 'name',
@@ -27,21 +44,14 @@ def home(request):
                 'name': 'EPSG:4326'
             }
         },
-        'features': [
-            {
-                'type': 'Feature',
-                'geometry': {
-                    'type': 'Point',
-                    'coordinates': [-70.8, 18.56]
-                }
-            },
-        ]
+        'features': features,
     }
 
     geojson_diversion_point_layer = MVLayer(
         source='GeoJSON',
-        options=diversion_points,
+        options=diversion_points_collection,
         legend_title="Diversion Points",
+        feature_selection=True,
         layer_options={
             'style': {
                 'image': {
@@ -72,7 +82,6 @@ def home(request):
         layers=[geojson_diversion_point_layer],
         view=view_options,
         basemap='OpenStreetMap',
-        legend=True
     )
 
     context = {

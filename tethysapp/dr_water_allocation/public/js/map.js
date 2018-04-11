@@ -1,8 +1,7 @@
-$(document).ready(function (DiversionPoints)
-{
-    var legend="/static/map_plot/images/Legends/zInvis.png";
-    var input = document.getElementById('legend');
-    input.src = legend;
+$(function() {
+    //var legend="/static/map_plot/images/Legends/zInvis.png";
+    //var input = document.getElementById('legend');
+    //input.src = legend;
     // Create new Overlay with the #popup element
     var popup = new ol.Overlay({
         element: document.getElementById('popup')
@@ -30,19 +29,20 @@ $(document).ready(function (DiversionPoints)
             // Get coordinates of the point to set position of the popup
             var coordinates = selected_feature.getGeometry().getCoordinates();
             var comID=selected_feature.get('feature_id')
-            var popup_content = '<div class="dam-popup">' +
-                                    '<p><b>' + selected_feature.get('site_name') + '</b></p>' +
+            var popup_content = '<div class="diversion-popup">' +
+                                    '<p><b>Point 1</b></p>' +
                                     '<table class="table  table-condensed">' +
                                         '<tr>' +
-                                            '<th>USGS Station ID:</th>' +
-                                            '<td>' + selected_feature.get('site_no') + '</td>' +
+                                            '<th>Demand</th>' +
+                                            '<td>' + selected_feature.get('demand') + '</td>' +
                                         '</tr>' +
                                         '<tr>' +
-                                            '<th>COMID:</th>' +
-                                            '<td>' + selected_feature.get('feature_id') + '</td>' +
+                                            '<th>Piority</th>' +
+                                            '<td>' + selected_feature.get('priority') + '</td>' +
                                         '</tr>' +
                                         '<tr>' +
-                                            '<th>' + '<a href="/apps/map-plot/stat/plot/?comid='+ comID + '">'+ 'Continue' + '</a>'+ '</th>' +
+                                            '<th>Efficiency</th>' +
+                                            '<td>' + selected_feature.get('efficiency') + '</td>' +
                                         '</tr>' +
                                     '</table>' +
                                 '</div>';
