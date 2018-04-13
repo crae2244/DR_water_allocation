@@ -29,6 +29,11 @@ class DrWaterAllocation(TethysAppBase):
                 url='dr-water-allocation',
                 controller='dr_water_allocation.controllers.home'
             ),
+            UrlMap(
+                name='results',
+                url='dr-water-allocation/results',
+                controller='dr_water_allocation.controllers.results'
+            ),
         )
 
         return url_maps

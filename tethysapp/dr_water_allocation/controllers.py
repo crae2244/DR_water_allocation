@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, reverse
 from django.contrib.auth.decorators import login_required
-from tethys_sdk.gizmos import Button
+from tethys_sdk.gizmos import Button, DataTableView
 from tethys_sdk.gizmos import MapView, MVView, MVLayer, MVLegendClass
 from model import read_points_from_csv
 
@@ -10,14 +10,10 @@ def home(request):
     Controller for the app home page.
     """
 
-    next_button = Button(
+    compute_button = Button(
         display_text='Compute',
-        name='next-button',
-        attributes={
-            'data-toggle':'tooltip',
-            'data-placement':'top',
-            'title':'next'
-        }
+        name='compute-button',
+        href=reverse('dr_water_allocation:results'),
     )
 
     diversion_points_list = read_points_from_csv()
@@ -67,7 +63,6 @@ def home(request):
             }
         }
     )
-    print geojson_diversion_point_layer
     view_options = MVView(
         projection='EPSG:4326',
         center=[-70.8, 18.56],
@@ -79,7 +74,7 @@ def home(request):
     map_view_options = MapView(
         height='100%',
         width='100%',
-        controls=[ 'Rotate', 'FullScreen',
+        controls=['Rotate', 'FullScreen',
                   {'MousePosition': {'projection': 'EPSG:4326'}},
                   {'ZoomToExtent': {'projection': 'EPSG:4326', 'extent': [-130, 22, -65, 54]}}],
         layers=[geojson_diversion_point_layer],
@@ -88,8 +83,30 @@ def home(request):
     )
 
     context = {
-        'next_button': next_button,
+        'compute_button': compute_button,
         'map_view_options': map_view_options,
     }
 
     return render(request, 'dr_water_allocation/home.html', context)
+
+
+def results(request):
+
+    back_button = Button(
+        display_text='Back',
+        name='back-button',
+        href=reverse('dr_water_allocation:home'),
+    )
+
+    datatable_results = DataTableView(
+        column_names=('Name', 'Demand', 'Priority', "Water Diverted"),
+        rows=[('SanJuan', 4, 'High', 4)],
+        searching=False,
+        orderClasses=False,
+    )
+
+    context = {
+        'back_button': back_button,
+        'datatable_results': datatable_results,
+    }
+    return render(request, 'dr_water_allocation/results.html', context)

@@ -28,7 +28,6 @@ $(function() {
             var selected_feature = e.target.item(0); // 1st feature in Collection
             // Get coordinates of the point to set position of the popup
             var coordinates = selected_feature.getGeometry().getCoordinates();
-            var comID=selected_feature.get('feature_id')
             var popup_content = '<div class="diversion-popup">' +
                                     '<p><b>'+ selected_feature.get('point_name') + '</b></p>' +
                                     '<table class="table  table-condensed">' +
@@ -37,14 +36,21 @@ $(function() {
                                             '<td><input type="text" name="demand"></td>' +
                                         '</tr>' +
                                         '<tr>' +
-                                            '<th>Piority</th>' +
-                                            '<td><input type="text" name="priority"></td>' +
+                                            '<th>Priority</th>' +
+                                            '<td><select class="priority-select">  ' +
+                                                '<option value=1>High</option>' +
+                                                '<option value=2>Medium</option>' +
+                                                '<option value=3>Low</option>' +
+                                            '</select></td>' +
                                         '</tr>' +
                                         '<tr>' +
                                             '<th>Efficiency</th>' +
-                                            '<td><input type="text" name="efficeincy"></td>' +
+                                            '<td><input type="text" name="efficiency"></td>' +
                                         '</tr>' +
                                     '</table>' +
+                                    '<div id="wrapper">' +
+                                        '<button type="button" class="update-button">Update</button>'+
+                                    '</div>'+
                                 '</div>';
 
             // Clean up last popup and reinitialize
