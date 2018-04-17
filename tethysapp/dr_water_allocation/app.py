@@ -1,4 +1,5 @@
 from tethys_sdk.base import TethysAppBase, url_map_maker
+from tethys_sdk.app_settings import PersistentStoreDatabaseSetting
 
 
 class DrWaterAllocation(TethysAppBase):
@@ -16,6 +17,21 @@ class DrWaterAllocation(TethysAppBase):
     tags = 'DR'
     enable_feedback = False
     feedback_emails = []
+
+    def persistent_store_settings(self):
+        """
+        Define Persistent Store Settings.
+        """
+        ps_settings = (
+            PersistentStoreDatabaseSetting(
+                name='main_db',
+                description='main database',
+                initializer='dr_water_allocation.model.init_main_db',
+                required=True
+            ),
+        )
+
+        return ps_settings
 
     def url_maps(self):
         """

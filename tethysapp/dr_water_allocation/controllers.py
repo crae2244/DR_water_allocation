@@ -2,7 +2,7 @@ from django.shortcuts import render, reverse
 from django.contrib.auth.decorators import login_required
 from tethys_sdk.gizmos import Button, DataTableView
 from tethys_sdk.gizmos import MapView, MVView, MVLayer, MVLegendClass
-from model import read_points_from_csv
+from model import get_all_dams, get_all_diversions
 
 @login_required()
 def home(request):
@@ -16,7 +16,7 @@ def home(request):
         href=reverse('dr_water_allocation:results'),
     )
 
-    diversion_points_list = read_points_from_csv()
+    diversion_points_list = get_all_diversions()
     features = []
 
     for item in diversion_points_list:
@@ -24,13 +24,13 @@ def home(request):
             'type': 'Feature',
             'geometry': {
                 'type': 'Point',
-                'coordinates': [item[2], item[3]],
+                'coordinates': [item.latitude, item.longitude],
             },
             'properties':{
-                'point_name':[item[0]],
-                'demand':[item[1]],
-                'efficiency':[.6],
-                'priority':'High'
+                'point_name':item.name,
+                'demand':item.demand,
+                'efficiency':item.efficiency,
+                'priority':item.priority
             }
         }
         features.append(diversion_point_feature)
