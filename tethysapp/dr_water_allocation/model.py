@@ -37,6 +37,7 @@ class DiversionPoints(Base):
     demand = Column(Float)
     priority = Column(Integer)
     efficiency = Column(Float)
+    water_diverted = Column(Float)
 
 class Dams(Base):
 
@@ -65,7 +66,8 @@ def init_main_db(engine, first_time):
             name=item[0],
             demand=item[1],
             priority=2,
-            efficiency=.65
+            efficiency=.65,
+            water_diverted=2
         )
         session.add(diversion_point)
 

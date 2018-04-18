@@ -4,6 +4,8 @@ from tethys_sdk.gizmos import Button, DataTableView
 from tethys_sdk.gizmos import MapView, MVView, MVLayer, MVLegendClass
 from model import get_all_dams, get_all_diversions
 
+import json
+
 @login_required()
 def home(request):
     """
@@ -97,10 +99,34 @@ def results(request):
         name='back-button',
         href=reverse('dr_water_allocation:home'),
     )
+    diversion_points_list = get_all_diversions()
+    points_in_table = []
+    for item in diversion_points_list:
+        if item.priority == 1:
+            priority = 'High'
+        elif item.priority == 2:
+            priority = 'Medium'
+        else:
+            priority = 'Low'
+
+        if item.water_diverted > 0:
+            percent_demand = int((item.demand / item.water_diverted)*100)
+        else:
+            percent_demand = 0
+
+        table_entry = (
+            item.name,
+            item.demand,
+            priority,
+            item.efficiency,
+            item.water_diverted,
+            percent_demand
+        )
+        points_in_table.append(table_entry)
 
     datatable_results = DataTableView(
-        column_names=('Name', 'Demand', 'Priority', "Water Diverted"),
-        rows=[('SanJuan', 4, 'High', 4)],
+        column_names=('Name', 'Demand', 'Priority', 'Efficiency', 'Water Received', 'Percent Demand'),
+        rows=points_in_table,
         searching=False,
         orderClasses=False,
     )
@@ -110,3 +136,10 @@ def results(request):
         'datatable_results': datatable_results,
     }
     return render(request, 'dr_water_allocation/results.html', context)
+
+"""
+def get_persistent_store_data(request):
+    get_data = request.GET
+    
+    try:
+"""
