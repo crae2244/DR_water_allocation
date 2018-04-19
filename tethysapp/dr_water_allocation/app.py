@@ -7,7 +7,7 @@ class DrWaterAllocation(TethysAppBase):
     Tethys app class for DR Water Allocation.
     """
 
-    name = 'DR Water Allocation'
+    name = 'RD Asignacion De Agua'
     index = 'dr_water_allocation:home'
     icon = 'dr_water_allocation/images/flag-waving-250.png'
     package = 'dr_water_allocation'

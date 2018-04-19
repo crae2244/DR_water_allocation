@@ -56,26 +56,26 @@ $(function() {
                                         '<p><b name="name">'+ selected_feature.get('point_name') + '</b></p>' +
                                         '<table class="table  table-condensed">' +
                                             '<tr>' +
-                                                '<th>Demand</th>' +
+                                                '<th>Demanda</th>' +
                                                 '<td><input type="text" name="demand" value="'+ selected_feature.get('demand') +'"></td>' +
                                             '</tr>' +
                                             '<tr>' +
-                                                '<th>Priority</th>' +
+                                                '<th>Prioridad</th>' +
                                                 '<td><select class="priority-select" name="priority" ' +
                                                         'selected="'+ selected_feature.get('priority') +'">  ' +
-                                                    '<option value=1>High</option>' +
-                                                    '<option value=2>Medium</option>' +
-                                                    '<option value=3>Low</option>' +
+                                                    '<option value=1>Alta</option>' +
+                                                    '<option value=2>Media</option>' +
+                                                    '<option value=3>Baja</option>' +
                                                 '</select></td>' +
                                             '</tr>' +
                                             '<tr>' +
-                                                '<th>Efficiency</th>' +
+                                                '<th>Efficiencia</th>' +
                                                 '<td><input type="text" name="efficiency" value="'+ selected_feature.get('efficiency') +'"></td>' +
                                             '</tr>' +
                                         '</table>' +
                                         '<div id="wrapper">' +
                                             '<button type="button" class="update-button" ' +
-                                            'onclick="update_persistent_store_point()">Update</button>'+
+                                            'onclick="update_persistent_store_point()">Actualizar</button>'+
                                         '</div>'+
                                     '</div>';
 

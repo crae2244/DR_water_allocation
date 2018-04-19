@@ -18,7 +18,7 @@ def home(request):
     """
 
     compute_button = Button(
-        display_text='Compute',
+        display_text='Calcular',
         name='compute-button',
         href=reverse('dr_water_allocation:results'),
         attributes={
@@ -151,7 +151,7 @@ def home(request):
 def results(request):
 
     back_button = Button(
-        display_text='Back',
+        display_text='Atras',
         name='back-button',
         href=reverse('dr_water_allocation:home'),
     )
@@ -181,7 +181,7 @@ def results(request):
         points_in_table.append(table_entry)
 
     datatable_results = DataTableView(
-        column_names=('Name', 'Demand', 'Priority', 'Efficiency', 'Water Received', 'Percent Demand'),
+        column_names=('Nombre', 'Demanda', 'Prioridad', 'Eficiencia', 'Agua Recibida', 'Por Ciento'),
         rows=points_in_table,
         searching=False,
         orderClasses=False,
