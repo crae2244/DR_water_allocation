@@ -55,41 +55,41 @@ def init_main_db(engine, first_time):
     # Create all the tables
     Base.metadata.create_all(engine)
 
-    #if first_time:
-    Session = sessionmaker(bind=engine)
-    session = Session()
+    if first_time:
+        Session = sessionmaker(bind=engine)
+        session = Session()
 
-    original_points = read_points_from_csv()
+        original_points = read_points_from_csv()
 
-    for item in original_points:
-        diversion_point = DiversionPoints(
-            latitude=item[2],
-            longitude=item[3],
-            name=item[0],
-            demand=item[1],
-            priority=2,
-            efficiency=.65,
-            water_diverted=2
+        for item in original_points:
+            diversion_point = DiversionPoints(
+                latitude=item[2],
+                longitude=item[3],
+                name=item[0],
+                demand=item[1],
+                priority=2,
+                efficiency=.65,
+                water_diverted=2
+            )
+            session.add(diversion_point)
+
+        dam1 = Dams(
+            name="habada",
+            latitude=-71.05109,
+            longitude=18.70798,
+            output=100
         )
-        session.add(diversion_point)
 
-    dam1 = Dams(
-        name="habada",
-        latitude=-71.05109,
-        longitude=18.70798,
-        output=100
-    )
-
-    dam2 = Dams(
-        name="babada",
-        latitude=-71.289964,
-        longitude=18.9820202,
-        output=100
-    )
-    session.add(dam1)
-    session.add(dam2)
-    session.commit()
-    session.close()
+        dam2 = Dams(
+            name="babada",
+            latitude=-71.289964,
+            longitude=18.9820202,
+            output=100
+        )
+        session.add(dam1)
+        session.add(dam2)
+        session.commit()
+        session.close()
 
 def get_all_dams():
     """

@@ -62,7 +62,7 @@ $(function() {
                                             '<tr>' +
                                                 '<th>Priority</th>' +
                                                 '<td><select class="priority-select" name="priority" ' +
-                                                        'value="'+ selected_feature.get('priority') +'">  ' +
+                                                        'selected="'+ selected_feature.get('priority') +'">  ' +
                                                     '<option value=1>High</option>' +
                                                     '<option value=2>Medium</option>' +
                                                     '<option value=3>Low</option>' +
@@ -78,6 +78,7 @@ $(function() {
                                             'onclick="update_persistent_store_point()">Update</button>'+
                                         '</div>'+
                                     '</div>';
+
 
             // Clean up last popup and reinitialize
             $(popup_element).popover('destroy');

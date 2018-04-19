@@ -4,6 +4,7 @@ from tethys_sdk.gizmos import Button, DataTableView
 from tethys_sdk.gizmos import MapView, MVView, MVLayer, MVLegendClass
 from model import get_all_dams, get_all_diversions, DiversionPoints, Dams
 from django.http import HttpResponse
+from sqlalchemy.orm import sessionmaker
 from django.views.decorators.csrf import csrf_exempt
 import json
 
@@ -21,7 +22,7 @@ def home(request):
         name='compute-button',
         href=reverse('dr_water_allocation:results'),
         attributes={
-            "onclick": "compute_water()"
+            "onclick": compute_water()
         }
     )
 
@@ -228,36 +229,102 @@ def update_persistent_store_dam(request):
     session.close()
 
     return HttpResponse('Changes Made')
-#def compute_water():
 
 
-    #Algorithm diverting the waters based on demand and priority
-    #
-    # Session = app.get_persistent_store_database('main_db', as_sessionmaker=True)
-    # session = Session()
-    #
-    # dams = get_all_dams()
-    # diversions = get_all_diversions()
-    #
-    # total_supply = 0
-    # total_demand = 0
-    # for dam in dams:
-    #     total_supply += dam.output
-    #
-    # for diversion in diversions:
-    #     total_demand += diversion.demand
-    #
-    # if total_supply > total_demand:
-    #
-    #     for diversion in diversions:
-    #         diversion.water_diverted = diversion.demand
-    #
-    #     session.commit()
-    #     session.close()
-    #
-    # else:
-    #
-    #     for diversion in diversion:
-    #         if diversion.priority == 1:
-    #             diversion.water_diverted = diversion.demand
-    #
+def compute_water():
+
+    # Algorithm diverting the waters based on demand and priority
+
+    Session = app.get_persistent_store_database('main_db', as_sessionmaker=True)
+    session = Session()
+
+    dams = get_all_dams()
+    diversions = get_all_diversions()
+
+    total_supply = 0
+    total_demand = 0
+    demand_1 = 0
+    demand_2 = 0
+    demand_3 = 0
+
+    for dam in dams:
+        total_supply += dam.output
+
+    print total_supply
+
+    for diversion in diversions:
+        if diversion.priority == 1:
+            demand_1 += diversion.demand
+        elif diversion.priority == 2:
+            demand_2 += diversion.demand
+        else:
+            demand_3 += diversion.demand
+        total_demand += diversion.demand
+
+    print "subdemand"
+    print demand_1
+    print demand_2
+    print demand_3
+
+    print total_demand
+
+    if total_supply > total_demand:
+
+        print "Enough Water"
+
+        for diversion in diversions:
+            target = session.query(DiversionPoints).filter_by(name=diversion.name).first()
+            target.water_diverted = diversion.demand
+        session.commit()
+
+    else:
+
+        print "Water Shortage"
+        if total_supply < demand_1:
+            for diversion in diversions:
+                if diversion.priority == 1:
+                    #point gets portion of remaining water
+                    proportionate_allocation = total_supply/demand_1
+                    target = session.query(DiversionPoints).filter_by(name=diversion.name).first()
+                    target.water_diverted = diversion.demand * proportionate_allocation
+
+                elif diversion.priority == 2:
+                    target = session.query(DiversionPoints).filter_by(name=diversion.name).first()
+                    target.water_diverted = 0
+
+                else:
+                    target = session.query(DiversionPoints).filter_by(name=diversion.name).first()
+                    target.water_diverted = 0
+        elif (total_supply > demand_1) and (total_supply < (demand_1+demand_2)):
+            for diversion in diversions:
+                if diversion.priority == 1:
+                    target = session.query(DiversionPoints).filter_by(name=diversion.name).first()
+                    target.water_diverted = target.water_diverted = diversion.demand
+
+                elif diversion.priority == 2:
+                    # point gets portion of remaining water
+                    proportionate_allocation = (total_supply- demand_1)/demand_2
+                    target = session.query(DiversionPoints).filter_by(name=diversion.name).first()
+                    target.water_diverted = diversion.demand * proportionate_allocation
+
+                else:
+                    target = session.query(DiversionPoints).filter_by(name=diversion.name).first()
+                    target.water_diverted = 0
+        else:
+            for diversion in diversions:
+                if diversion.priority == 1:
+                    proportionate_allocation = total_supply / demand_1
+                    target = session.query(DiversionPoints).filter_by(name=diversion.name).first()
+                    target.water_diverted = target.water_diverted = proportionate_allocation * diversion.demand
+
+                elif diversion.priority == 2:
+                    target = session.query(DiversionPoints).filter_by(name=diversion.name).first()
+                    target.water_diverted = diversion.demand
+
+                else:
+                    # point gets portion of remaining water"
+                    target = session.query(DiversionPoints).filter_by(name=diversion.name).first()
+                    target.water_diverted = 0
+    session.commit()
+    session.close()
+
