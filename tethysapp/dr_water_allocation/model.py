@@ -5,6 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, Float, String
 from sqlalchemy.orm import sessionmaker
 
+
 from .app import DrWaterAllocation as app
 
 
@@ -44,6 +45,7 @@ class Dams(Base):
     __tablename__ = 'dam'
 
     id = Column(Integer, primary_key=True)
+    name = Column(String)
     latitude = Column(Float)
     longitude = Column(Float)
     output = Column(Float)
@@ -71,6 +73,21 @@ def init_main_db(engine, first_time):
         )
         session.add(diversion_point)
 
+    dam1 = Dams(
+        name="habada",
+        latitude=-71.05109,
+        longitude=18.70798,
+        output=100
+    )
+
+    dam2 = Dams(
+        name="babada",
+        latitude=-71.289964,
+        longitude=18.9820202,
+        output=100
+    )
+    session.add(dam1)
+    session.add(dam2)
     session.commit()
     session.close()
 
@@ -90,7 +107,7 @@ def get_all_dams():
 
 def get_all_diversions():
     """
-    Get all persisted dams.
+    Get all persisted diversions.
     """
     # Get connection/session to database
     Session = app.get_persistent_store_database('main_db', as_sessionmaker=True)

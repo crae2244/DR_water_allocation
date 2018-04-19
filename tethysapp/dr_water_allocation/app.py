@@ -50,6 +50,16 @@ class DrWaterAllocation(TethysAppBase):
                 url='dr-water-allocation/results',
                 controller='dr_water_allocation.controllers.results'
             ),
+            UrlMap(
+                name='update_persistent_store_point',
+                url='dr-water-allocation/update-persistent-store-point',
+                controller='dr_water_allocation.controllers.update_persistent_store_point'
+            ),
+            UrlMap(
+                name='update_persistent_store_dam',
+                url='dr-water-allocation/update-persistent-store-dam',
+                controller='dr_water_allocation.controllers.update_persistent_store_dam'
+            )
         )
 
         return url_maps
